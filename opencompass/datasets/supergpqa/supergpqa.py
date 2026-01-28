@@ -35,7 +35,12 @@ class SuperGPQADataset(BaseDataset):
              field: str = None,
              subfield: str = None,
              **kwargs):
-        dataset = load_dataset(path, split='train')
+        # 提取 data_files 参数（如果有）
+        data_files = kwargs.pop('data_files', None)
+        if data_files:
+            dataset = load_dataset(path, data_files=data_files, split='train', **kwargs)
+        else:
+            dataset = load_dataset(path, split='train', **kwargs)
 
         if discipline is not None:
             dataset = dataset.filter(lambda x: x['discipline'] == discipline)
